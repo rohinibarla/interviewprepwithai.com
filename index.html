@@ -491,8 +491,23 @@
             `;
         };
 
-        const root = createRoot(document.getElementById('root'));
-        root.render(html`<${App} />`);
+        // Initialize app
+        function initApp() {
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                const root = createRoot(rootElement);
+                root.render(React.createElement(App));
+            } else {
+                console.error('Root element not found');
+            }
+        }
+
+        // Ensure DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
     </script>
 </body>
 </html>
