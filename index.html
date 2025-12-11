@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Prep with AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #ebebeb;
+        }
+
+        .result-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .prompt-box {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ai-links {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .ai-links-title {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .ai-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .ai-link:hover {
+            border-color: #667eea;
+            background: #f9f9ff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@19.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@19.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.554.0",
+            "htm/preact": "https://esm.sh/htm@3.1.1/preact",
+            "htm": "https://esm.sh/htm@3.1.1"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import React, { useState } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { Sparkles, Copy, Check, ExternalLink } from 'lucide-react';
+        import htm from 'htm';
+
+        const html = htm.bind(React.createElement);
+
+        const App = () => {
+            const [domain, setDomain] = useState('');
+            const [experience, setExperience] = useState('fresher');
+            const [promptType, setPromptType] = useState('technical');
+            const [generatedPrompt, setGeneratedPrompt] = useState('');
+            const [copied, setCopied] = useState(false);
+
+            const generatePrompt = () => {
+                let prompt = '';
+
+                const expText = experience === 'fresher'
+                    ? 'a fresher with no prior work experience'
+                    : `someone with ${experience} of professional experience`;
+
+                if (promptType === 'technical') {
+                    prompt = `I'm preparing for a technical interview in the ${domain} domain as ${expText}.
+
+Please help me prepare by:
+
+1. Asking me 10 technical questions that are appropriate for my experience level
+2. Starting with easier questions and gradually increasing difficulty
+3. After I answer each question, provide:
+   - Whether my answer is correct
+   - A detailed explanation of the correct answer
+   - Additional context or related concepts I should know
+
+Let's start with the first question when I'm ready.`;
+                } else {
+                    prompt = `I'm preparing for a system design interview in the ${domain} domain as ${expText}.
+
+Please help me prepare by:
+
+1. Giving me a system design problem appropriate for my experience level
+2. Guiding me through the design process step by step
+3. Asking clarifying questions as I would encounter in a real interview
+4. Providing feedback on my design decisions
+5. Suggesting improvements and discussing trade-offs
+
+Please present the system design problem when I'm ready to start.`;
+                }
+
+                setGeneratedPrompt(prompt);
+            };
+
+            const copyToClipboard = async () => {
+                await navigator.clipboard.writeText(generatedPrompt);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const aiTools = [
+                { name: 'ChatGPT', url: 'https://chat.openai.com' },
+                { name: 'Claude', url: 'https://claude.ai' },
+                { name: 'Gemini', url: 'https://gemini.google.com' },
+                { name: 'Perplexity', url: 'https://www.perplexity.ai' }
+            ];
+
+            return html`
+                <div className="container">
+                    <div className="card">
+                        <h1>Interview Prep with AI</h1>
+                        <p className="subtitle">
+                            Generate customized prompts for your interview preparation
+                        </p>
+
+                        <div className="form-group">
+                            <label htmlFor="domain">Domain / Role</label>
+                            <input
+                                id="domain"
+                                type="text"
+                                placeholder="e.g., Frontend Development, Data Science, Backend Engineering"
+                                value=${domain}
+                                onInput=${(e) => setDomain(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="experience">Experience Level</label>
+                            <select
+                                id="experience"
+                                value=${experience}
+                                onChange=${(e) => setExperience(e.target.value)}
+                            >
+                                <option value="fresher">Fresher (0 years)</option>
+                                <option value="1-2 years">1-2 years</option>
+                                <option value="3-5 years">3-5 years</option>
+                                <option value="5+ years">5+ years</option>
+                                <option value="10+ years">10+ years</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="promptType">Interview Type</label>
+                            <select
+                                id="promptType"
+                                value=${promptType}
+                                onChange=${(e) => setPromptType(e.target.value)}
+                            >
+                                <option value="technical">Technical Interview</option>
+                                <option value="system-design">System Design</option>
+                            </select>
+                        </div>
+
+                        <button
+                            className="btn btn-primary"
+                            onClick=${generatePrompt}
+                            disabled=${!domain.trim()}
+                        >
+                            <${Sparkles} size=${20} />
+                            Generate Prompt
+                        </button>
+
+                        ${generatedPrompt && html`
+                            <div className="result-section">
+                                <div className="prompt-box">
+                                    ${generatedPrompt}
+                                </div>
+
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick=${copyToClipboard}
+                                >
+                                    <${copied ? Check : Copy} size=${18} />
+                                    ${copied ? 'Copied!' : 'Copy to Clipboard'}
+                                </button>
+
+                                <div className="ai-links">
+                                    <div className="ai-links-title">
+                                        Open in your favorite AI tool:
+                                    </div>
+                                    <div className="button-group">
+                                        ${aiTools.map(tool => html`
+                                            <a
+                                                key=${tool.name}
+                                                href=${tool.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="ai-link"
+                                            >
+                                                ${tool.name}
+                                                <${ExternalLink} size=${14} />
+                                            </a>
+                                        `)}
+                                    </div>
+                                </div>
+                            </div>
+                        `}
+                    </div>
+
+                    ${copied && html`
+                        <div className="toast">
+                            <${Check} size=${18} />
+                            Copied to clipboard!
+                        </div>
+                    `}
+                </div>
+            `;
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(html`<${App} />`);
+    </script>
+</body>
+</html>
