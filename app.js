@@ -131,7 +131,8 @@ export default function App() {
                     onChange: (e) => setPromptType(e.target.value)
                 },
                     h('option', { value: 'technical' }, 'Technical Interview'),
-                    h('option', { value: 'system-design' }, 'System Design')
+                    h('option', { value: 'system-design' }, 'System Design'),
+                    h('option', { value: 'coding-round' }, 'Coding Round')
                 )
             ),
 

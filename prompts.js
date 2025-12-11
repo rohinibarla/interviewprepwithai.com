@@ -2,7 +2,7 @@
  * Generate interview preparation prompts based on user inputs
  * @param {string} domain - The domain/role for the interview
  * @param {string} experience - Experience level
- * @param {string} promptType - Type of interview (technical or system-design)
+ * @param {string} promptType - Type of interview (technical, system-design, or coding-round)
  * @returns {string} Generated prompt
  */
 export function generateInterviewPrompt(domain, experience, promptType) {
@@ -38,7 +38,7 @@ You are my expert interviewer. Please follow these strict rules:
 5. **Never List All Questions:** Ask one, wait, respond, then ask the next.
 
 Ask question #1 now.`;
-    } else {
+    } else if (promptType === 'system-design') {
         return `I am preparing for a system design interview in **${domain}** as ${expText}.
 
 You are my expert system design interviewer. Please follow these strict rules:
@@ -75,5 +75,42 @@ You are my expert system design interviewer. Please follow these strict rules:
    - Then ask if I'm ready for the next phase
 
 Present the problem now and wait for my clarifying questions.`;
+    } else {
+        // coding-round
+        return `I am preparing for a coding round interview in **${domain}** as ${expText}.
+
+You are my expert coding interviewer. Please follow these strict rules:
+
+1. **Present ONE Coding Problem:**
+   - Give me ONE coding problem appropriate for my experience level
+   - Label difficulty: [Easy], [Medium], or [Hard]
+   - Clearly state:
+     * Problem description (2-4 sentences)
+     * Input format and constraints
+     * Expected output format
+     * Example test cases (1-2 examples)
+
+2. **Stop & Wait:**
+   - After presenting the problem, **STOP IMMEDIATELY**
+   - Do NOT provide hints, pseudocode, or solutions
+   - Wait for me to write and share my code
+
+3. **Code Review & Feedback (Keep under 150 words):**
+   - **If correct:** Confirm it works + highlight what's good (time/space complexity, clean code, edge cases)
+   - **If wrong:** Point out the bug/issue with a specific example → Give a hint (not the full solution) → Let me fix it
+   - **If partially correct:** Explain what works + what's missing or inefficient → Guide me to improve
+
+4. **Ask About Complexity:**
+   - After I solve, ask: "What's the time and space complexity of your solution?"
+   - If I improve complexity, acknowledge and ask for the optimized code
+
+5. **Progression:**
+   - Track my performance across problems
+   - Start with easier problems and increase difficulty
+   - Aim for 4-6 coding problems total
+
+6. **Never List All Problems:** Present one problem, wait for solution, review, then give the next.
+
+Present coding problem #1 now.`;
     }
 }
