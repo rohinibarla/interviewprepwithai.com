@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interview Prep with AI</title>
     <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --text-tertiary: #444;
+            --border-color: #e0e0e0;
+            --input-bg: #ffffff;
+            --btn-secondary-bg: #f5f5f5;
+            --btn-secondary-hover: #ebebeb;
+            --prompt-box-bg: #f9f9f9;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --ai-link-hover-bg: #f9f9ff;
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --card-bg: #0f3460;
+            --text-primary: #e8e8e8;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #d0d0d0;
+            --border-color: #2a4a6a;
+            --input-bg: #1a3a5a;
+            --btn-secondary-bg: #1a3a5a;
+            --btn-secondary-hover: #2a4a6a;
+            --prompt-box-bg: #1a3a5a;
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --ai-link-hover-bg: #2a4a6a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,10 +45,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: var(--text-primary);
+            transition: background 0.3s ease;
         }
 
         .container {
@@ -26,22 +59,45 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px var(--shadow-color);
+            transition: background 0.3s ease;
+            position: relative;
         }
 
         h1 {
             font-size: 2rem;
             margin-bottom: 8px;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .subtitle {
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 32px;
             font-size: 0.95rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--btn-secondary-bg);
+            border: 2px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--btn-secondary-hover);
+            transform: rotate(180deg);
         }
 
         .form-group {
@@ -52,17 +108,19 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #444;
+            color: var(--text-tertiary);
             font-size: 0.9rem;
         }
 
         input, select {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.2s;
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
 
         input:focus, select:focus {
@@ -96,30 +154,52 @@
         }
 
         .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
-            border: 2px solid #e0e0e0;
+            background: var(--btn-secondary-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background: #ebebeb;
+            background: var(--btn-secondary-hover);
+        }
+
+        .btn-share {
+            background: var(--btn-secondary-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            margin-left: 12px;
+        }
+
+        .btn-share:hover {
+            background: var(--btn-secondary-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .result-section {
             margin-top: 32px;
             padding-top: 32px;
-            border-top: 2px solid #f0f0f0;
+            border-top: 2px solid var(--border-color);
         }
 
         .prompt-box {
-            background: #f9f9f9;
-            border: 2px solid #e0e0e0;
+            background: var(--prompt-box-bg);
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 16px;
             white-space: pre-wrap;
             line-height: 1.6;
             font-size: 0.95rem;
+            color: var(--text-primary);
         }
 
         .button-group {
@@ -131,12 +211,12 @@
         .ai-links {
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid var(--border-color);
         }
 
         .ai-links-title {
             font-size: 0.85rem;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 12px;
         }
 
@@ -145,18 +225,18 @@
             align-items: center;
             gap: 6px;
             padding: 8px 16px;
-            background: white;
-            border: 2px solid #e0e0e0;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
             border-radius: 6px;
             text-decoration: none;
-            color: #333;
+            color: var(--text-primary);
             font-size: 0.9rem;
             transition: all 0.2s;
         }
 
         .ai-link:hover {
             border-color: #667eea;
-            background: #f9f9ff;
+            background: var(--ai-link-hover-bg);
         }
 
         .hidden {
@@ -206,9 +286,9 @@
     </script>
 
     <script type="module">
-        import React, { useState } from 'react';
+        import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
-        import { Sparkles, Copy, Check, ExternalLink } from 'lucide-react';
+        import { Sparkles, Copy, Check, ExternalLink, Moon, Sun, Share2 } from 'lucide-react';
         import htm from 'htm';
         import { generateInterviewPrompt } from './prompts.js';
 
@@ -220,6 +300,42 @@
             const [promptType, setPromptType] = useState('technical');
             const [generatedPrompt, setGeneratedPrompt] = useState('');
             const [copied, setCopied] = useState(false);
+            const [darkMode, setDarkMode] = useState(false);
+            const [shareSuccess, setShareSuccess] = useState(false);
+
+            // Initialize from URL params and localStorage on mount
+            useEffect(() => {
+                // Check for URL parameters
+                const params = new URLSearchParams(window.location.search);
+                const urlDomain = params.get('domain');
+                const urlExperience = params.get('experience');
+                const urlPromptType = params.get('type');
+
+                if (urlDomain) setDomain(decodeURIComponent(urlDomain));
+                if (urlExperience) setExperience(urlExperience);
+                if (urlPromptType) setPromptType(urlPromptType);
+
+                // Check for saved theme preference
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    setDarkMode(true);
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }, []);
+
+            // Toggle dark mode
+            const toggleDarkMode = () => {
+                const newMode = !darkMode;
+                setDarkMode(newMode);
+
+                if (newMode) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                }
+            };
 
             const generatePrompt = () => {
                 const prompt = generateInterviewPrompt(domain, experience, promptType);
@@ -232,6 +348,23 @@
                 setTimeout(() => setCopied(false), 2000);
             };
 
+            const shareSettings = async () => {
+                const params = new URLSearchParams({
+                    domain: domain,
+                    experience: experience,
+                    type: promptType
+                });
+                const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+
+                try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    setShareSuccess(true);
+                    setTimeout(() => setShareSuccess(false), 2000);
+                } catch (err) {
+                    console.error('Failed to copy share link:', err);
+                }
+            };
+
             const aiTools = [
                 { name: 'ChatGPT', url: 'https://chat.openai.com' },
                 { name: 'Claude', url: 'https://claude.ai' },
@@ -242,6 +375,10 @@
             return html`
                 <div className="container">
                     <div className="card">
+                        <button className="theme-toggle" onClick=${toggleDarkMode} aria-label="Toggle dark mode">
+                            <${darkMode ? Sun : Moon} size=${20} />
+                        </button>
+
                         <h1>Interview Prep with AI</h1>
                         <p className="subtitle">
                             Generate customized prompts for your interview preparation
@@ -285,14 +422,27 @@
                             </select>
                         </div>
 
-                        <button
-                            className="btn btn-primary"
-                            onClick=${generatePrompt}
-                            disabled=${!domain.trim()}
-                        >
-                            <${Sparkles} size=${20} />
-                            Generate Prompt
-                        </button>
+                        <div className="button-group">
+                            <button
+                                className="btn btn-primary"
+                                onClick=${generatePrompt}
+                                disabled=${!domain.trim()}
+                                style="flex: 1;"
+                            >
+                                <${Sparkles} size=${20} />
+                                Generate Prompt
+                            </button>
+
+                            <button
+                                className="btn btn-share"
+                                onClick=${shareSettings}
+                                disabled=${!domain.trim()}
+                                title="Copy shareable link"
+                            >
+                                <${shareSuccess ? Check : Share2} size=${18} />
+                                ${shareSuccess ? 'Copied!' : 'Share'}
+                            </button>
+                        </div>
 
                         ${generatedPrompt && html`
                             <div className="result-section">
